@@ -269,7 +269,7 @@ textLabel.Font = Enum.Font.SourceSansBold
 textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 
 -- Teks Morse
-textLabel.Text = "freeze"
+textLabel.Text = ""
 
 -- Tampilkan 15 detik
 task.wait(1)
