@@ -244,12 +244,7 @@ local function updateCharacterReferences(newChar)
         Humanoid = Character:WaitForChild("Humanoid")
         HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
     end
-end   -- Morse Code Center Text Display
--- Durasi: 15 detik
-
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-local playerGui = player:WaitForChild("PlayerGui")
+end   
 
 
 
