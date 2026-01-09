@@ -1,0 +1,296 @@
+-- Manual One-Tap Lag Switch with 0.5s Duration
+-- Simple click to freeze
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local Workspace = game:GetService("Workspace")
+local CoreGui = game:GetService("CoreGui")
+
+local Player = Players.LocalPlayer
+local Character = Player.Character or Player.CharacterAdded:Wait()
+local Humanoid = Character:WaitForChild("Humanoid")
+local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
+
+-- Configuration
+local FreezeDuration = 0.8  -- Freeze duration in seconds (500ms)
+local Cooldown = 0.2 -- Cooldown between freezes
+local LastFreezeTime = 0
+local IsFreezing = false
+
+-- Remove old GUI if exists
+if CoreGui:FindFirstChild("LagSwitchUI") then
+    CoreGui.LagSwitchUI:Destroy()
+    wait(0.1)
+end
+
+-- Create simple GUI
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "LagSwitchUI"
+ScreenGui.ResetOnSpawn = false
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+ScreenGui.DisplayOrder = 10
+ScreenGui.Enabled = true
+ScreenGui.Parent = CoreGui
+
+wait(0.1)
+
+-- Main Button Container
+local IceButton = Instance.new("Frame")
+IceButton.Name = "IceButton"
+IceButton.Size = UDim2.new(0, 180, 0, 80)
+IceButton.Position = UDim2.new(0.5, -90, 0.8, -40)
+IceButton.AnchorPoint = Vector2.new(0.5, 0.5)
+IceButton.BackgroundColor3 = Color3.fromRGB(0, 100, 200)
+IceButton.BackgroundTransparency = 0.2
+IceButton.BorderSizePixel = 0
+IceButton.Active = true
+IceButton.Visible = true
+IceButton.Parent = ScreenGui
+
+-- Border for visibility
+local Border = Instance.new("UIStroke")
+Border.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+Border.Color = Color3.fromRGB(100, 150, 255)
+Border.Thickness = 3
+Border.Transparency = 0.1
+Border.Parent = IceButton
+
+-- Button text
+local ButtonText = Instance.new("TextLabel")
+ButtonText.Size = UDim2.new(1, 0, 1, 0)
+ButtonText.Position = UDim2.new(0, 0, 0, 0)
+ButtonText.Text = "FREZEE"
+ButtonText.Font = Enum.Font.GothamBlack
+ButtonText.TextSize = 18
+ButtonText.TextColor3 = Color3.fromRGB(255, 255, 255)
+ButtonText.BackgroundTransparency = 1
+ButtonText.TextStrokeTransparency = 0.1
+ButtonText.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+ButtonText.ZIndex = 2
+ButtonText.Visible = true
+ButtonText.TextWrapped = true
+ButtonText.TextYAlignment = Enum.TextYAlignment.Center
+ButtonText.Parent = IceButton
+
+-- Simple click detection
+local ClickDetector = Instance.new("TextButton")
+ClickDetector.Size = UDim2.new(1, 0, 1, 0)
+ClickDetector.Position = UDim2.new(0, 0, 0, 0)
+ClickDetector.BackgroundTransparency = 1
+ClickDetector.Text = ""
+ClickDetector.ZIndex = 3
+ClickDetector.Parent = IceButton
+
+-- Function to ensure UI visibility
+local function ensureUIVisibility()
+    if not IceButton or not IceButton.Parent then
+        warn("IceButton missing, recreating...")
+    else
+        IceButton.Visible = true
+    end
+end
+
+delay(1, ensureUIVisibility)
+
+-- Simple drag functionality
+local dragging = false
+local dragStart, startPos
+
+local function startDrag(input)
+    dragging = true
+    dragStart = input.Position
+    startPos = IceButton.Position
+end
+
+local function updateDrag(input)
+    if dragging then
+        local delta = input.Position - dragStart
+        IceButton.Position = UDim2.new(
+            startPos.X.Scale, 
+            startPos.X.Offset + delta.X,
+            startPos.Y.Scale, 
+            startPos.Y.Offset + delta.Y
+        )
+    end
+end
+
+local function endDrag(input)
+    dragging = false
+end
+
+ClickDetector.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+        startDrag(input)
+    end
+end)
+
+ClickDetector.InputChanged:Connect(function(input)
+    if dragging and (input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseMovement) then
+        updateDrag(input)
+    end
+end)
+
+ClickDetector.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+        endDrag(input)
+    end
+end)
+
+-- Freeze function optimized for 0.5s duration
+local function TriggerFreeze()
+    local currentTime = tick()
+    
+    -- Check cooldown
+    if currentTime - LastFreezeTime < Cooldown then
+        return
+    end
+    
+    -- Check character status
+    if not Character or not Humanoid or Humanoid.Health <= 0 then
+        return
+    end
+    
+    -- Set status freezing
+    IsFreezing = true
+    LastFreezeTime = currentTime
+    
+    -- Save start time
+    local startTime = os.clock()
+    
+    -- Visual feedback
+    ButtonText.Text = "FREEZING..."
+    IceButton.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
+    
+    -- Optimized freeze technique for 0.5s duration
+    local function causeOptimizedLag()
+        -- Network-intensive operations
+        local parts = {}
+        local connections = {}
+        
+        -- Create multiple parts to cause network lag
+        for i = 1, 30 do
+            local part = Instance.new("Part")
+            part.Anchored = true
+            part.CanCollide = false
+            part.Transparency = 1
+            part.Size = Vector3.new(1, 1, 1)
+            part.Position = HumanoidRootPart.Position + Vector3.new(math.random(-20, 20), math.random(-10, 10), math.random(-20, 20))
+            part.Parent = workspace
+            
+            -- Add velocity for network updates
+            part.Velocity = Vector3.new(math.random(-10, 10), math.random(-10, 10), math.random(-10, 10))
+            
+            table.insert(parts, part)
+            
+            -- Create some property changes
+            local conn = part.Changed:Connect(function()
+                -- Empty but creates network traffic
+            end)
+            table.insert(connections, conn)
+        end
+        
+        -- CPU load with precise timing
+        while os.clock() - startTime < FreezeDuration do
+            -- Moderate CPU load with occasional yields
+            for j = 1, 400 do
+                local x = math.sqrt(j) * math.sin(j) * math.cos(j)
+            end
+            
+            -- Small yield to prevent script timeout
+            if os.clock() - startTime > FreezeDuration * 0.5 then
+                RunService.Heartbeat:Wait()
+            end
+        end
+        
+        -- Clean up
+        for _, part in ipairs(parts) do
+            part:Destroy()
+        end
+        for _, conn in ipairs(connections) do
+            conn:Disconnect()
+        end
+        parts = nil
+        connections = nil
+        collectgarbage()
+    end
+    
+    -- Run freeze with error handling
+    local success, err = pcall(causeOptimizedLag)
+    if not success then
+        warn("Lag generation error: " .. tostring(err))
+        -- Fallback method
+        local start = os.clock()
+        while os.clock() - start < FreezeDuration do
+            RunService.Heartbeat:Wait()
+        end
+    end
+    
+    -- Reset status and visual feedback
+    IsFreezing = false
+    ButtonText.Text = "FREZEE"
+    IceButton.BackgroundColor3 = Color3.fromRGB(0, 100, 200)
+end
+
+-- Manual freeze trigger
+ClickDetector.MouseButton1Click:Connect(function()
+    TriggerFreeze()
+end)
+
+-- Function to update character references after respawn
+local function updateCharacterReferences(newChar)
+    Character = newChar or Player.Character
+    if Character then
+        Humanoid = Character:WaitForChild("Humanoid")
+        HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
+    end
+end   -- Morse Code Center Text Display
+-- Durasi: 15 detik
+
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+-- Buat ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "MorseCodeGui"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = playerGui
+
+-- Buat TextLabel
+local textLabel = Instance.new("TextLabel")
+textLabel.Parent = screenGui
+textLabel.Size = UDim2.new(1, 0, 0, 100)
+textLabel.Position = UDim2.new(0, 0, 0.5, -50)
+textLabel.BackgroundTransparency = 1
+textLabel.TextWrapped = true
+textLabel.TextScaled = true
+textLabel.Font = Enum.Font.SourceSansBold
+textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+-- Teks Morse
+textLabel.Text = "morse code -.. . -. -..- -.-- -.-- ...-.   -... -.--   --.. . -. -..- -.-- -.-- ...-."
+
+-- Tampilkan 15 detik
+task.wait(15)
+
+-- Hapus UI
+screenGui:Destroy()
+
+
+-- Setup initial references
+updateCharacterReferences()
+
+-- Auto-update character reference after respawn
+Player.CharacterAdded:Connect(updateCharacterReferences)
+
+-- Ensure UI stays visible
+RunService.Heartbeat:Connect(function()
+    if IceButton and IceButton.Parent then
+        IceButton.Visible = true
+    end
+end)
+
+print("Manual One-Tap Lag Switch Loaded!")
+print("Click the blue button to trigger 0.5s freeze")
+print("Cooldown: "..Cooldown.."s between freezes")
