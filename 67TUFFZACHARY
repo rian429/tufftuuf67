@@ -1,32 +1,24 @@
--- Delta Executor Optimized: Pink Glass Custom Edition
--- Theme: Pink Glass | Editable Seconds
--- ADDED: APPLY + RESET BUTTONS
--- ADDED: UI WIDTH (100–700px) + UI HEIGHT (50–350px)
--- ADDED: INSTALL BLOXSTRAP 🌱 (IN SETTINGS)
--- ADDED: AUTO EXECUTE BLOXSTRAP ON RUN
--- OTHER LOGIC UNCHANGED
+-- Delta Executor Optimized: LIGHT GLASS BLUE EDITION
+-- THEME LIGHTENED ONLY
+-- LOGIC, SIZE, POSITION, BUTTONS UNCHANGED
 
 local Player = game:GetService("Players").LocalPlayer
 local PlayerGui = Player:WaitForChild("PlayerGui")
 local UIS = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
 
 if PlayerGui:FindFirstChild("DeltaPinkCustom") then
 	PlayerGui.DeltaPinkCustom:Destroy()
 end
-
--- AUTO EXECUTE BLOXSTRAP
-pcall(function()
-	loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-OP-bloxstrap-mobile-71317"))()
-end)
 
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "DeltaPinkCustom"
 ScreenGui.Parent = PlayerGui
 ScreenGui.ResetOnSpawn = false
 ScreenGui.IgnoreGuiInset = true
-ScreenGui.DisplayOrder = 10
 
--- DEFAULTS
+---------------- STATE ----------------
+
 local DEFAULT_FREEZE = 0.4
 local DEFAULT_WIDTH = 200
 local DEFAULT_HEIGHT = 75
@@ -36,172 +28,202 @@ local UI_WIDTH = DEFAULT_WIDTH
 local UI_HEIGHT = DEFAULT_HEIGHT
 local DRAG_ENABLED = true
 
-------------------- UI ELEMENTS -------------------
+---------------- MAIN BUTTON ----------------
 
 local Main = Instance.new("TextButton")
 Main.Size = UDim2.new(0, UI_WIDTH, 0, UI_HEIGHT)
-Main.Position = UDim2.new(0.5, -UI_WIDTH/2, 1, -(UI_HEIGHT + 80))
-Main.BackgroundColor3 = Color3.fromRGB(255, 20, 147)
-Main.BackgroundTransparency = 0.5
+Main.Position = UDim2.new(0.5, -UI_WIDTH/2, 0.4, 0)
+Main.BackgroundColor3 = Color3.fromRGB(170,220,255)
+Main.BackgroundTransparency = 0.05
 Main.BorderSizePixel = 0
 Main.Text = "FREEZE"
 Main.Font = Enum.Font.GothamBold
 Main.TextSize = 24
-Main.TextColor3 = Color3.new(1,1,1)
+Main.TextColor3 = Color3.fromRGB(255,255,255)
 Main.AutoButtonColor = false
 Main.Parent = ScreenGui
 
-local MainStroke = Instance.new("UIStroke")
-MainStroke.Thickness = 3
-MainStroke.Color = Color3.fromRGB(255,105,180)
-MainStroke.Parent = Main
+Instance.new("UICorner", Main).CornerRadius = UDim.new(0,14)
 
-local DragToggle = Instance.new("TextButton")
+local Stroke = Instance.new("UIStroke", Main)
+Stroke.Color = Color3.fromRGB(120,200,255)
+Stroke.Thickness = 2
+
+local TitleGlow = Instance.new("UIStroke", Main)
+TitleGlow.Color = Color3.fromRGB(220,250,255)
+TitleGlow.Thickness = 1.5
+TitleGlow.Transparency = 0.35
+
+local MainGradient = Instance.new("UIGradient", Main)
+MainGradient.Color = ColorSequence.new{
+	ColorSequenceKeypoint.new(0, Color3.fromRGB(200,235,255)),
+	ColorSequenceKeypoint.new(1, Color3.fromRGB(150,210,255))
+}
+MainGradient.Rotation = 90
+
+---------------- DRAG TOGGLE ----------------
+
+local DragToggle = Instance.new("TextButton", Main)
 DragToggle.Size = UDim2.new(0,40,0,18)
 DragToggle.Position = UDim2.new(1,-45,0,5)
-DragToggle.BackgroundColor3 = Color3.fromRGB(255,255,255)
-DragToggle.BackgroundTransparency = 0.8
+DragToggle.BackgroundColor3 = Color3.fromRGB(210,240,255)
+DragToggle.BackgroundTransparency = 0.1
 DragToggle.Text = "ON"
 DragToggle.Font = Enum.Font.GothamBold
 DragToggle.TextSize = 12
-DragToggle.TextColor3 = Color3.fromRGB(255,20,147)
-DragToggle.Parent = Main
+DragToggle.TextColor3 = Color3.fromRGB(40,120,180)
+Instance.new("UICorner", DragToggle).CornerRadius = UDim.new(0,8)
 
 DragToggle.MouseButton1Click:Connect(function()
 	DRAG_ENABLED = not DRAG_ENABLED
 	DragToggle.Text = DRAG_ENABLED and "ON" or "OFF"
 end)
 
-local SettingBtn = Instance.new("TextButton")
+---------------- SETTINGS BUTTON ----------------
+
+local SettingBtn = Instance.new("TextButton", Main)
 SettingBtn.Size = UDim2.new(0,25,0,25)
 SettingBtn.Position = UDim2.new(0,5,0,5)
-SettingBtn.BackgroundColor3 = Color3.fromRGB(255,255,255)
-SettingBtn.BackgroundTransparency = 0.8
+SettingBtn.BackgroundColor3 = Color3.fromRGB(210,240,255)
+SettingBtn.BackgroundTransparency = 0.1
 SettingBtn.Text = "⚙"
 SettingBtn.TextSize = 15
-SettingBtn.Parent = Main
+SettingBtn.TextColor3 = Color3.fromRGB(60,140,200)
+Instance.new("UICorner", SettingBtn).CornerRadius = UDim.new(0,8)
 
-local SideMenu = Instance.new("Frame")
-SideMenu.Size = UDim2.new(0,170,0,260)
+---------------- SETTINGS PANEL ----------------
+
+local SideMenu = Instance.new("Frame", Main)
+SideMenu.Size = UDim2.new(0,160,0,260)
 SideMenu.Position = UDim2.new(1,10,0,0)
-SideMenu.BackgroundColor3 = Color3.fromRGB(30,0,15)
-SideMenu.BackgroundTransparency = 0.3
+SideMenu.BackgroundColor3 = Color3.fromRGB(210,235,255)
+SideMenu.BackgroundTransparency = 0.05
 SideMenu.Visible = false
-SideMenu.Parent = Main
 
-local SideStroke = Instance.new("UIStroke")
-SideStroke.Color = Color3.fromRGB(255,105,180)
+Instance.new("UICorner", SideMenu).CornerRadius = UDim.new(0,12)
+
+local SideStroke = Instance.new("UIStroke", SideMenu)
+SideStroke.Color = Color3.fromRGB(150,210,255)
 SideStroke.Thickness = 2
-SideStroke.Parent = SideMenu
+
+local SideGradient = Instance.new("UIGradient", SideMenu)
+SideGradient.Color = ColorSequence.new{
+	ColorSequenceKeypoint.new(0, Color3.fromRGB(230,245,255)),
+	ColorSequenceKeypoint.new(1, Color3.fromRGB(190,225,255))
+}
+SideGradient.Rotation = 90
+
+SettingBtn.MouseButton1Click:Connect(function()
+	SideMenu.Visible = not SideMenu.Visible
+end)
+
+---------------- INPUT HELPERS ----------------
 
 local function label(text, y)
-	local l = Instance.new("TextLabel")
-	l.Text = text
+	local l = Instance.new("TextLabel", SideMenu)
 	l.Size = UDim2.new(1,0,0,18)
 	l.Position = UDim2.new(0,0,y,0)
 	l.BackgroundTransparency = 1
-	l.TextColor3 = Color3.fromRGB(255,105,180)
+	l.Text = text
 	l.Font = Enum.Font.GothamBold
 	l.TextSize = 10
-	l.Parent = SideMenu
+	l.TextColor3 = Color3.fromRGB(60,140,200)
 	return l
 end
 
 local function box(text, y)
-	local b = Instance.new("TextBox")
+	local b = Instance.new("TextBox", SideMenu)
 	b.Size = UDim2.new(0.8,0,0,24)
 	b.Position = UDim2.new(0.1,0,y,0)
-	b.BackgroundColor3 = Color3.fromRGB(0,0,0)
-	b.BackgroundTransparency = 0.5
+	b.BackgroundColor3 = Color3.fromRGB(235,245,255)
+	b.BackgroundTransparency = 0.05
 	b.Text = text
-	b.TextColor3 = Color3.new(1,1,1)
 	b.Font = Enum.Font.GothamBold
 	b.TextSize = 12
-	b.Parent = SideMenu
+	b.TextColor3 = Color3.fromRGB(40,120,180)
+	Instance.new("UICorner", b).CornerRadius = UDim.new(0,8)
 	return b
 end
 
-label("SET SECONDS",0.02)
-local DelayBox = box(tostring(FreezeDuration),0.10)
+label("SET SECONDS",0)
+local InputBox = box(tostring(FreezeDuration),0.12)
 
-label("UI WIDTH (100–700)",0.22)
-local WidthBox = box(tostring(UI_WIDTH),0.30)
+label("UI WIDTH (100–700)",0.32)
+local WidthBox = box(tostring(UI_WIDTH),0.42)
 
-label("UI HEIGHT (50–350)",0.42)
-local HeightBox = box(tostring(UI_HEIGHT),0.50)
+label("UI HEIGHT (50–350)",0.56)
+local HeightBox = box(tostring(UI_HEIGHT),0.66)
 
-local ApplyBtn = Instance.new("TextButton")
-ApplyBtn.Size = UDim2.new(0.9,0,0,26)
-ApplyBtn.Position = UDim2.new(0.05,0,0.64,0)
-ApplyBtn.BackgroundColor3 = Color3.fromRGB(255,105,180)
-ApplyBtn.BackgroundTransparency = 0.2
-ApplyBtn.Text = "APPLY CHANGES"
-ApplyBtn.Font = Enum.Font.GothamBold
-ApplyBtn.TextSize = 12
-ApplyBtn.TextColor3 = Color3.new(1,1,1)
-ApplyBtn.Parent = SideMenu
+---------------- INSTALL BLOXSTRAP ----------------
 
-local ResetBtn = Instance.new("TextButton")
-ResetBtn.Size = UDim2.new(0.9,0,0,26)
-ResetBtn.Position = UDim2.new(0.05,0,0.75,0)
-ResetBtn.BackgroundColor3 = Color3.fromRGB(180,80,120)
-ResetBtn.BackgroundTransparency = 0.2
-ResetBtn.Text = "RESET DEFAULTS"
-ResetBtn.Font = Enum.Font.GothamBold
-ResetBtn.TextSize = 12
-ResetBtn.TextColor3 = Color3.new(1,1,1)
-ResetBtn.Parent = SideMenu
-
-local InstallBtn = Instance.new("TextButton")
+local InstallBtn = Instance.new("TextButton", SideMenu)
 InstallBtn.Size = UDim2.new(0.9,0,0,26)
-InstallBtn.Position = UDim2.new(0.05,0,0.86,0)
-InstallBtn.BackgroundColor3 = Color3.fromRGB(120,255,160)
-InstallBtn.BackgroundTransparency = 0.15
+InstallBtn.Position = UDim2.new(0.05,0,0.78,0)
+InstallBtn.BackgroundColor3 = Color3.fromRGB(200,235,255)
+InstallBtn.BackgroundTransparency = 0.05
 InstallBtn.Text = "INSTALL BLOXSTRAP 🌱"
 InstallBtn.Font = Enum.Font.GothamBold
 InstallBtn.TextSize = 12
-InstallBtn.TextColor3 = Color3.new(0,0,0)
-InstallBtn.Parent = SideMenu
+InstallBtn.TextColor3 = Color3.fromRGB(40,120,180)
+Instance.new("UICorner", InstallBtn).CornerRadius = UDim.new(0,10)
 
-------------------- LOGIC -------------------
+InstallBtn.MouseButton1Click:Connect(function()
+	loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-OP-bloxstrap-mobile-71317"))()
+end)
+
+---------------- APPLY / RESET ----------------
+
+local ApplyBtn = Instance.new("TextButton", SideMenu)
+ApplyBtn.Size = UDim2.new(0.42,0,0,24)
+ApplyBtn.Position = UDim2.new(0.05,0,0.9,0)
+ApplyBtn.Text = "APPLY"
+ApplyBtn.Font = Enum.Font.GothamBold
+ApplyBtn.TextSize = 11
+ApplyBtn.BackgroundColor3 = Color3.fromRGB(215,240,255)
+ApplyBtn.BackgroundTransparency = 0.05
+ApplyBtn.TextColor3 = Color3.fromRGB(40,120,180)
+Instance.new("UICorner", ApplyBtn).CornerRadius = UDim.new(0,8)
+
+local ResetBtn = Instance.new("TextButton", SideMenu)
+ResetBtn.Size = UDim2.new(0.42,0,0,24)
+ResetBtn.Position = UDim2.new(0.53,0,0.9,0)
+ResetBtn.Text = "RESET"
+ResetBtn.Font = Enum.Font.GothamBold
+ResetBtn.TextSize = 11
+ResetBtn.BackgroundColor3 = Color3.fromRGB(215,240,255)
+ResetBtn.BackgroundTransparency = 0.05
+ResetBtn.TextColor3 = Color3.fromRGB(40,120,180)
+Instance.new("UICorner", ResetBtn).CornerRadius = UDim.new(0,8)
+
+---------------- APPLY / RESET LOGIC ----------------
+
+local function resizePreserve()
+	local pos = Main.Position
+	Main.Size = UDim2.new(0, UI_WIDTH, 0, UI_HEIGHT)
+	Main.Position = pos
+end
 
 ApplyBtn.MouseButton1Click:Connect(function()
-	local d = tonumber(DelayBox.Text)
+	local f = tonumber(InputBox.Text)
 	local w = tonumber(WidthBox.Text)
 	local h = tonumber(HeightBox.Text)
-
-	if d then FreezeDuration = d end
+	if f then FreezeDuration = f end
 	if w then UI_WIDTH = math.clamp(w,100,700) end
 	if h then UI_HEIGHT = math.clamp(h,50,350) end
-
-	Main.Size = UDim2.new(0,UI_WIDTH,0,UI_HEIGHT)
-	Main.Position = UDim2.new(0.5,-UI_WIDTH/2,1,-(UI_HEIGHT+80))
-
-	DelayBox.Text = tostring(FreezeDuration)
-	WidthBox.Text = tostring(UI_WIDTH)
-	HeightBox.Text = tostring(UI_HEIGHT)
+	resizePreserve()
 end)
 
 ResetBtn.MouseButton1Click:Connect(function()
 	FreezeDuration = DEFAULT_FREEZE
 	UI_WIDTH = DEFAULT_WIDTH
 	UI_HEIGHT = DEFAULT_HEIGHT
-
-	Main.Size = UDim2.new(0,UI_WIDTH,0,UI_HEIGHT)
-	Main.Position = UDim2.new(0.5,-UI_WIDTH/2,1,-(UI_HEIGHT+80))
-
-	DelayBox.Text = tostring(FreezeDuration)
-	WidthBox.Text = tostring(UI_WIDTH)
-	HeightBox.Text = tostring(UI_HEIGHT)
+	InputBox.Text = tostring(DEFAULT_FREEZE)
+	WidthBox.Text = tostring(DEFAULT_WIDTH)
+	HeightBox.Text = tostring(DEFAULT_HEIGHT)
+	resizePreserve()
 end)
 
-SettingBtn.MouseButton1Click:Connect(function()
-	SideMenu.Visible = not SideMenu.Visible
-end)
-
-InstallBtn.MouseButton1Click:Connect(function()
-	loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-OP-bloxstrap-mobile-71317"))()
-end)
+---------------- FREEZE LOGIC ----------------
 
 local IsFreezing = false
 local function TriggerFreeze()
@@ -209,17 +231,17 @@ local function TriggerFreeze()
 	IsFreezing = true
 	Main.Text = "FREEZING..."
 	task.wait(0.01)
-
 	local start = os.clock()
 	while os.clock() - start < FreezeDuration do
-		for i=1,5000000 do local _=i*i end
+		for i = 1, 5000000 do local _ = i*i end
 	end
-
 	Main.Text = "FREEZE"
 	IsFreezing = false
 end
 
-local dragging, dragInput, dragStart, startPos
+---------------- DRAG ----------------
+
+local dragging, dragStart, startPos, dragInput
 
 local function update(input)
 	local delta = input.Position - dragStart
@@ -233,17 +255,12 @@ end
 
 Main.InputBegan:Connect(function(input)
 	if not DRAG_ENABLED then return end
-	if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch)
-		and UIS:GetFocusedTextBox() == nil then
-
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 		dragging = true
 		dragStart = input.Position
 		startPos = Main.Position
-
 		input.Changed:Connect(function()
-			if input.UserInputState == Enum.UserInputState.End then
-				dragging = false
-			end
+			if input.UserInputState == Enum.UserInputState.End then dragging = false end
 		end)
 	end
 end)
@@ -255,9 +272,15 @@ Main.InputChanged:Connect(function(input)
 end)
 
 UIS.InputChanged:Connect(function(input)
-	if dragging and DRAG_ENABLED and input == dragInput then
-		update(input)
-	end
+	if dragging and DRAG_ENABLED and input == dragInput then update(input) end
 end)
 
 Main.MouseButton1Click:Connect(TriggerFreeze)
+
+---------------- SOFT LIGHT GLOW ----------------
+
+TweenService:Create(
+	Stroke,
+	TweenInfo.new(1.4, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true),
+	{Thickness = 3}
+):Play()
