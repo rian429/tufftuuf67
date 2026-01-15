@@ -1,6 +1,5 @@
--- Delta Executor Optimized: LIGHT GLASS BLUE EDITION
--- SQUARE EDGES EDITION
--- LOGIC, SIZE, POSITION, BUTTONS UNCHANGED
+-- ls modified by ru
+-- red border animation, pink theme
 -- fflag
 pcall(function()
     setfflag("MaxMissedWorldStepsRemembered", 1000)
@@ -279,3 +278,73 @@ TweenService:Create(
 	TweenInfo.new(1.4, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true),
 	{Thickness = 3}
 ):Play()
+
+-- animation
+
+local CyberBorder = Instance.new("UIStroke")
+CyberBorder.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+CyberBorder.Color = Color3.fromRGB(255, 0, 0)
+CyberBorder.Thickness = 3
+CyberBorder.Transparency = 0.1
+CyberBorder.Parent = Main
+
+-- RED BORDER FLOW (SAFE VERSION)
+-- put AFTER Main is created and added to ScreenGui
+
+local BorderFlowContainer = Instance.new("Frame")
+BorderFlowContainer.Size = UDim2.new(1, 0, 1, 0)
+BorderFlowContainer.BackgroundTransparency = 1
+BorderFlowContainer.ClipsDescendants = true
+BorderFlowContainer.ZIndex = 3
+BorderFlowContainer.Parent = Main
+
+local PURE_RED = Color3.fromRGB(255, 0, 0)
+local LIGHT_RED = Color3.fromRGB(255, 100, 100)
+
+local function createLine(position, size, anchor)
+	local line = Instance.new("Frame")
+	line.Size = size
+	line.Position = position
+	if anchor then line.AnchorPoint = anchor end
+	line.BackgroundColor3 = PURE_RED
+	line.BorderSizePixel = 0
+	line.ZIndex = 4
+	line.Parent = BorderFlowContainer
+
+	local glow = Instance.new("UIStroke")
+	glow.Color = LIGHT_RED
+	glow.Thickness = 3
+	glow.Transparency = 0.3
+	glow.Parent = line
+	return line
+end
+
+local LineTop = createLine(UDim2.new(0,0,0,2), UDim2.new(0,0,0,2))
+local LineRight = createLine(UDim2.new(1,0,0,0), UDim2.new(0,2,0,0), Vector2.new(1,0))
+local LineBottom = createLine(UDim2.new(1,0,1,0), UDim2.new(0,0,0,2), Vector2.new(1,1))
+local LineLeft = createLine(UDim2.new(0,0,1,0), UDim2.new(0,2,0,0), Vector2.new(0,1))
+
+-- ANIMATION (non-blocking)
+task.spawn(function()
+	local SIDE_TIME = 1.2
+	local PAUSE = 2
+	local tweenInfo = TweenInfo.new(SIDE_TIME, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+
+	while Main.Parent do
+		TweenService:Create(LineTop, tweenInfo, {Size = UDim2.new(1,0,0,2)}):Play()
+		task.wait(SIDE_TIME)
+		TweenService:Create(LineRight, tweenInfo, {Size = UDim2.new(0,2,1,0)}):Play()
+		task.wait(SIDE_TIME)
+		TweenService:Create(LineBottom, tweenInfo, {Size = UDim2.new(1,0,0,2)}):Play()
+		task.wait(SIDE_TIME)
+		TweenService:Create(LineLeft, tweenInfo, {Size = UDim2.new(0,2,1,0)}):Play()
+		task.wait(SIDE_TIME)
+		task.wait(PAUSE)
+
+		-- reset after pause
+		LineTop.Size = UDim2.new(0,0,0,2)
+		LineRight.Size = UDim2.new(0,2,0,0)
+		LineBottom.Size = UDim2.new(0,0,0,2)
+		LineLeft.Size = UDim2.new(0,2,0,0)
+	end
+end)
