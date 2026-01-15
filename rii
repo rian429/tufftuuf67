@@ -1,4 +1,4 @@
--- ls modified by ru
+-- ls modified by ri
 -- red border animation, pink theme
 -- fflag
 pcall(function()
@@ -37,13 +37,13 @@ local DRAG_ENABLED = true
 local Main = Instance.new("TextButton")
 Main.Size = UDim2.new(0, UI_WIDTH, 0, UI_HEIGHT)
 Main.Position = UDim2.new(0.5, -UI_WIDTH/2, 0.4, 0)
-Main.BackgroundColor3 = Color3.fromRGB(170,220,255)
-Main.BackgroundTransparency = 0.05
+Main.BackgroundColor3 = Color3.fromRGB(0,0,0)
+Main.BackgroundTransparency = 0.3
 Main.BorderSizePixel = 0
 Main.Text = "FREEZE"
 Main.Font = Enum.Font.GothamBold
 Main.TextSize = 24
-Main.TextColor3 = Color3.fromRGB(255,255,255)
+Main.TextColor3 = Color3.fromRGB(255,0.0)
 Main.AutoButtonColor = false
 Main.Parent = ScreenGui
 
