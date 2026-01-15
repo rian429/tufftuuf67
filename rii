@@ -48,18 +48,18 @@ Main.AutoButtonColor = false
 Main.Parent = ScreenGui
 
 local Stroke = Instance.new("UIStroke", Main)
-Stroke.Color = Color3.fromRGB(120,200,255)
+Stroke.Color = Color3.fromRGB(200, 50, 50)
 Stroke.Thickness = 2
 
 local TitleGlow = Instance.new("UIStroke", Main)
-TitleGlow.Color = Color3.fromRGB(220,250,255)
+TitleGlow.Color = Color3.fromRGB(255, 150, 150)
 TitleGlow.Thickness = 1.5
 TitleGlow.Transparency = 0.35
 
 local MainGradient = Instance.new("UIGradient", Main)
 MainGradient.Color = ColorSequence.new{
-	ColorSequenceKeypoint.new(0, Color3.fromRGB(200,235,255)),
-	ColorSequenceKeypoint.new(1, Color3.fromRGB(150,210,255))
+	ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 180, 180)),
+	ColorSequenceKeypoint.new(1, Color3.fromRGB(200, 50, 50))
 }
 MainGradient.Rotation = 90
 
