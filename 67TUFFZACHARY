@@ -1,7 +1,12 @@
 -- Delta Executor Optimized: LIGHT GLASS BLUE EDITION
 -- THEME LIGHTENED ONLY
 -- LOGIC, SIZE, POSITION, BUTTONS UNCHANGED
+-- fflag
+pcall(function()
+    setfflag("MaxMissedWorldStepsRemembered", 1000)
+end)
 
+-- main ls
 local Player = game:GetService("Players").LocalPlayer
 local PlayerGui = Player:WaitForChild("PlayerGui")
 local UIS = game:GetService("UserInputService")
