@@ -25,7 +25,7 @@ ScreenGui.IgnoreGuiInset = true
 
 local DEFAULT_FREEZE = 0.4
 local DEFAULT_WIDTH = 200
-local DEFAULT_HEIGHT = 75
+local DEFAULT_HEIGHT = 90
 
 local FreezeDuration = DEFAULT_FREEZE
 local UI_WIDTH = DEFAULT_WIDTH
