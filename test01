@@ -68,12 +68,12 @@ MainGradient.Rotation = 90
 local DragToggle = Instance.new("TextButton", Main)
 DragToggle.Size = UDim2.new(0,40,0,18)
 DragToggle.Position = UDim2.new(1,-45,0,5)
-DragToggle.BackgroundColor3 = Color3.fromRGB(210,240,255)
+DragToggle.BackgroundColor3 = Color3.fromRGB(0,0,0)
 DragToggle.BackgroundTransparency = 0.1
 DragToggle.Text = "ON"
 DragToggle.Font = Enum.Font.GothamBold
 DragToggle.TextSize = 12
-DragToggle.TextColor3 = Color3.fromRGB(40,120,180)
+DragToggle.TextColor3 = Color3.fromRGB(250,0,0)
 
 DragToggle.MouseButton1Click:Connect(function()
 	DRAG_ENABLED = not DRAG_ENABLED
