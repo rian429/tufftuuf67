@@ -348,3 +348,37 @@ task.spawn(function()
 		LineLeft.Size = UDim2.new(0,2,0,0)
 	end
 end)
+
+-- Digital Grid Pattern
+local GridPattern = Instance.new("Frame")
+GridPattern.Name = "GridPattern"
+GridPattern.Size = UDim2.new(1, 0, 1, 0)
+GridPattern.BackgroundTransparency = 1
+GridPattern.Parent = Main
+
+for i = 1, 3 do
+    local VerticalLine = Instance.new("Frame")
+    VerticalLine.Size = UDim2.new(0, 1, 1, 0)
+    VerticalLine.Position = UDim2.new(i/4, 0, 0, 0)
+    VerticalLine.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
+    VerticalLine.BackgroundTransparency = 0.8
+    VerticalLine.BorderSizePixel = 0
+    VerticalLine.Parent = GridPattern
+    
+    local HorizontalLine = Instance.new("Frame")
+    HorizontalLine.Size = UDim2.new(1, 0, 0, 1)
+    HorizontalLine.Position = UDim2.new(0, 0, i/4, 0)
+    HorizontalLine.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
+    HorizontalLine.BackgroundTransparency = 0.8
+    HorizontalLine.BorderSizePixel = 0
+    HorizontalLine.Parent = GridPattern
+end
+
+-- Scanner Line Effect
+local ScannerLine = Instance.new("Frame")
+ScannerLine.Size = UDim2.new(0, 2, 1, 0)
+ScannerLine.Position = UDim2.new(0, -10, 0, 0)
+ScannerLine.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
+ScannerLine.BorderSizePixel = 0
+ScannerLine.Visible = false
+ScannerLine.Parent = Main
