@@ -378,7 +378,7 @@ end
 local ScannerLine = Instance.new("Frame")
 ScannerLine.Size = UDim2.new(0, 2, 1, 0)
 ScannerLine.Position = UDim2.new(0, -10, 0, 0)
-ScannerLine.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
+ScannerLine.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
 ScannerLine.BorderSizePixel = 0
 ScannerLine.Visible = false
 ScannerLine.Parent = Main
