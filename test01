@@ -97,7 +97,7 @@ local SideMenu = Instance.new("Frame", Main)
 SideMenu.Size = UDim2.new(0,160,0,260)
 SideMenu.Position = UDim2.new(1,10,0,0)
 SideMenu.BackgroundColor3 = Color3.fromRGB(0,0,0)
-SideMenu.BackgroundTransparency = 0.05
+SideMenu.BackgroundTransparency = 0.2
 SideMenu.Visible = false
 
 local SideStroke = Instance.new("UIStroke", SideMenu)
@@ -106,8 +106,8 @@ SideStroke.Thickness = 2
 
 local SideGradient = Instance.new("UIGradient", SideMenu)
 SideGradient.Color = ColorSequence.new{
-	ColorSequenceKeypoint.new(0, Color3.fromRGB(230,245,255)),
-	ColorSequenceKeypoint.new(1, Color3.fromRGB(190,225,255))
+	ColorSequenceKeypoint.new(0, Color3.fromRGB(250,0,0)),
+	ColorSequenceKeypoint.new(1, Color3.fromRGB(250,0,0))
 }
 SideGradient.Rotation = 90
 
