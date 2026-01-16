@@ -125,7 +125,7 @@ local function label(text, y)
 	l.Text = text
 	l.Font = Enum.Font.GothamBold
 	l.TextSize = 10
-	l.TextColor3 = Color3.fromRGB(150,150,150)
+	l.TextColor3 = Color3.fromRGB(250,0,0)
 	return l
 end
 
@@ -133,12 +133,12 @@ local function box(text, y)
 	local b = Instance.new("TextBox", SideMenu)
 	b.Size = UDim2.new(0.8,0,0,24)
 	b.Position = UDim2.new(0.1,0,y,0)
-	b.BackgroundColor3 = Color3.fromRGB(0,0,0)
+	b.BackgroundColor3 = Color3.fromRGB(250,250,250)
 	b.BackgroundTransparency = 0.05
 	b.Text = text
 	b.Font = Enum.Font.GothamBold
 	b.TextSize = 12
-	b.TextColor3 = Color3.fromRGB(40,120,180)
+	b.TextColor3 = Color3.fromRGB(0,0,0)
 	return b
 end
 
