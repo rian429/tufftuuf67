@@ -125,7 +125,7 @@ local function label(text, y)
 	l.Text = text
 	l.Font = Enum.Font.GothamBold
 	l.TextSize = 10
-	l.TextColor3 = Color3.fromRGB(60,140,200)
+	l.TextColor3 = Color3.fromRGB(150,150,150)
 	return l
 end
 
@@ -133,7 +133,7 @@ local function box(text, y)
 	local b = Instance.new("TextBox", SideMenu)
 	b.Size = UDim2.new(0.8,0,0,24)
 	b.Position = UDim2.new(0.1,0,y,0)
-	b.BackgroundColor3 = Color3.fromRGB(235,245,255)
+	b.BackgroundColor3 = Color3.fromRGB(0,0,0)
 	b.BackgroundTransparency = 0.05
 	b.Text = text
 	b.Font = Enum.Font.GothamBold
@@ -161,7 +161,7 @@ InstallBtn.BackgroundTransparency = 0.05
 InstallBtn.Text = "INSTALL BLOXSTRAP 🌱"
 InstallBtn.Font = Enum.Font.GothamBold
 InstallBtn.TextSize = 12
-InstallBtn.TextColor3 = Color3.fromRGB(40,120,180)
+InstallBtn.TextColor3 = Color3.fromRGB(0,0,0)
 
 InstallBtn.MouseButton1Click:Connect(function()
 	loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-OP-bloxstrap-mobile-71317"))()
@@ -176,8 +176,8 @@ ApplyBtn.Text = "APPLY"
 ApplyBtn.Font = Enum.Font.GothamBold
 ApplyBtn.TextSize = 11
 ApplyBtn.BackgroundColor3 = Color3.fromRGB(150,150,150)
-ApplyBtn.BackgroundTransparency = 0.05
-ApplyBtn.TextColor3 = Color3.fromRGB(40,120,180)
+ApplyBtn.BackgroundTransparency = 0.00
+ApplyBtn.TextColor3 = Color3.fromRGB(0,0,0)
 
 local ResetBtn = Instance.new("TextButton", SideMenu)
 ResetBtn.Size = UDim2.new(0.42,0,0,24)
@@ -186,8 +186,8 @@ ResetBtn.Text = "RESET"
 ResetBtn.Font = Enum.Font.GothamBold
 ResetBtn.TextSize = 11
 ResetBtn.BackgroundColor3 = Color3.fromRGB(150,150,150)
-ResetBtn.BackgroundTransparency = 0.05
-ResetBtn.TextColor3 = Color3.fromRGB(40,120,180)
+ResetBtn.BackgroundTransparency = 0.00
+ResetBtn.TextColor3 = Color3.fromRGB(0,0,0)
 
 ---------------- APPLY / RESET LOGIC ----------------
 
