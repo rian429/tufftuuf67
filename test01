@@ -1,0 +1,350 @@
+-- ls modified by ri
+-- red border animation, pink theme
+-- fflag
+pcall(function()
+    setfflag("MaxMissedWorldStepsRemembered", 1000)
+end)
+
+-- main ls
+local Player = game:GetService("Players").LocalPlayer
+local PlayerGui = Player:WaitForChild("PlayerGui")
+local UIS = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+
+if PlayerGui:FindFirstChild("DeltaPinkCustom") then
+	PlayerGui.DeltaPinkCustom:Destroy()
+end
+
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "DeltaPinkCustom"
+ScreenGui.Parent = PlayerGui
+ScreenGui.ResetOnSpawn = false
+ScreenGui.IgnoreGuiInset = true
+
+---------------- STATE ----------------
+
+local DEFAULT_FREEZE = 0.4
+local DEFAULT_WIDTH = 200
+local DEFAULT_HEIGHT = 90
+
+local FreezeDuration = DEFAULT_FREEZE
+local UI_WIDTH = DEFAULT_WIDTH
+local UI_HEIGHT = DEFAULT_HEIGHT
+local DRAG_ENABLED = true
+
+---------------- MAIN BUTTON ----------------
+
+local Main = Instance.new("TextButton")
+Main.Size = UDim2.new(0, UI_WIDTH, 0, UI_HEIGHT)
+Main.Position = UDim2.new(0.5, -UI_WIDTH/2, 0.4, 0)
+Main.BackgroundColor3 = Color3.fromRGB(0,0,0)
+Main.BackgroundTransparency = 0.3
+Main.BorderSizePixel = 0
+Main.Text = "FREEZE"
+Main.Font = Enum.Font.GothamBold
+Main.TextSize = 24
+Main.TextColor3 = Color3.fromRGB(255,0.0)
+Main.AutoButtonColor = false
+Main.Parent = ScreenGui
+
+local Stroke = Instance.new("UIStroke", Main)
+Stroke.Color = Color3.fromRGB(200, 50, 50)
+Stroke.Thickness = 2
+
+local TitleGlow = Instance.new("UIStroke", Main)
+TitleGlow.Color = Color3.fromRGB(255, 150, 150)
+TitleGlow.Thickness = 1.5
+TitleGlow.Transparency = 0.35
+
+local MainGradient = Instance.new("UIGradient", Main)
+MainGradient.Color = ColorSequence.new{
+	ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 180, 180)),
+	ColorSequenceKeypoint.new(1, Color3.fromRGB(200, 50, 50))
+}
+MainGradient.Rotation = 90
+
+---------------- DRAG TOGGLE ----------------
+
+local DragToggle = Instance.new("TextButton", Main)
+DragToggle.Size = UDim2.new(0,40,0,18)
+DragToggle.Position = UDim2.new(1,-45,0,5)
+DragToggle.BackgroundColor3 = Color3.fromRGB(210,240,255)
+DragToggle.BackgroundTransparency = 0.1
+DragToggle.Text = "ON"
+DragToggle.Font = Enum.Font.GothamBold
+DragToggle.TextSize = 12
+DragToggle.TextColor3 = Color3.fromRGB(40,120,180)
+
+DragToggle.MouseButton1Click:Connect(function()
+	DRAG_ENABLED = not DRAG_ENABLED
+	DragToggle.Text = DRAG_ENABLED and "ON" or "OFF"
+end)
+
+---------------- SETTINGS BUTTON ----------------
+
+local SettingBtn = Instance.new("TextButton", Main)
+SettingBtn.Size = UDim2.new(0,25,0,25)
+SettingBtn.Position = UDim2.new(0,5,0,5)
+SettingBtn.BackgroundColor3 = Color3.fromRGB(210,240,255)
+SettingBtn.BackgroundTransparency = 0.1
+SettingBtn.Text = "⚙"
+SettingBtn.TextSize = 15
+SettingBtn.TextColor3 = Color3.fromRGB(60,140,200)
+
+---------------- SETTINGS PANEL ----------------
+
+local SideMenu = Instance.new("Frame", Main)
+SideMenu.Size = UDim2.new(0,160,0,260)
+SideMenu.Position = UDim2.new(1,10,0,0)
+SideMenu.BackgroundColor3 = Color3.fromRGB(210,235,255)
+SideMenu.BackgroundTransparency = 0.05
+SideMenu.Visible = false
+
+local SideStroke = Instance.new("UIStroke", SideMenu)
+SideStroke.Color = Color3.fromRGB(150,210,255)
+SideStroke.Thickness = 2
+
+local SideGradient = Instance.new("UIGradient", SideMenu)
+SideGradient.Color = ColorSequence.new{
+	ColorSequenceKeypoint.new(0, Color3.fromRGB(230,245,255)),
+	ColorSequenceKeypoint.new(1, Color3.fromRGB(190,225,255))
+}
+SideGradient.Rotation = 90
+
+SettingBtn.MouseButton1Click:Connect(function()
+	SideMenu.Visible = not SideMenu.Visible
+end)
+
+---------------- INPUT HELPERS ----------------
+
+local function label(text, y)
+	local l = Instance.new("TextLabel", SideMenu)
+	l.Size = UDim2.new(1,0,0,18)
+	l.Position = UDim2.new(0,0,y,0)
+	l.BackgroundTransparency = 1
+	l.Text = text
+	l.Font = Enum.Font.GothamBold
+	l.TextSize = 10
+	l.TextColor3 = Color3.fromRGB(60,140,200)
+	return l
+end
+
+local function box(text, y)
+	local b = Instance.new("TextBox", SideMenu)
+	b.Size = UDim2.new(0.8,0,0,24)
+	b.Position = UDim2.new(0.1,0,y,0)
+	b.BackgroundColor3 = Color3.fromRGB(235,245,255)
+	b.BackgroundTransparency = 0.05
+	b.Text = text
+	b.Font = Enum.Font.GothamBold
+	b.TextSize = 12
+	b.TextColor3 = Color3.fromRGB(40,120,180)
+	return b
+end
+
+label("SET SECONDS",0)
+local InputBox = box(tostring(FreezeDuration),0.12)
+
+label("UI WIDTH (100–700)",0.32)
+local WidthBox = box(tostring(UI_WIDTH),0.42)
+
+label("UI HEIGHT (50–350)",0.56)
+local HeightBox = box(tostring(UI_HEIGHT),0.66)
+
+---------------- INSTALL BLOXSTRAP ----------------
+
+local InstallBtn = Instance.new("TextButton", SideMenu)
+InstallBtn.Size = UDim2.new(0.9,0,0,26)
+InstallBtn.Position = UDim2.new(0.05,0,0.78,0)
+InstallBtn.BackgroundColor3 = Color3.fromRGB(200,235,255)
+InstallBtn.BackgroundTransparency = 0.05
+InstallBtn.Text = "INSTALL BLOXSTRAP 🌱"
+InstallBtn.Font = Enum.Font.GothamBold
+InstallBtn.TextSize = 12
+InstallBtn.TextColor3 = Color3.fromRGB(40,120,180)
+
+InstallBtn.MouseButton1Click:Connect(function()
+	loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-OP-bloxstrap-mobile-71317"))()
+end)
+
+---------------- APPLY / RESET ----------------
+
+local ApplyBtn = Instance.new("TextButton", SideMenu)
+ApplyBtn.Size = UDim2.new(0.42,0,0,24)
+ApplyBtn.Position = UDim2.new(0.05,0,0.9,0)
+ApplyBtn.Text = "APPLY"
+ApplyBtn.Font = Enum.Font.GothamBold
+ApplyBtn.TextSize = 11
+ApplyBtn.BackgroundColor3 = Color3.fromRGB(215,240,255)
+ApplyBtn.BackgroundTransparency = 0.05
+ApplyBtn.TextColor3 = Color3.fromRGB(40,120,180)
+
+local ResetBtn = Instance.new("TextButton", SideMenu)
+ResetBtn.Size = UDim2.new(0.42,0,0,24)
+ResetBtn.Position = UDim2.new(0.53,0,0.9,0)
+ResetBtn.Text = "RESET"
+ResetBtn.Font = Enum.Font.GothamBold
+ResetBtn.TextSize = 11
+ResetBtn.BackgroundColor3 = Color3.fromRGB(215,240,255)
+ResetBtn.BackgroundTransparency = 0.05
+ResetBtn.TextColor3 = Color3.fromRGB(40,120,180)
+
+---------------- APPLY / RESET LOGIC ----------------
+
+local function resizePreserve()
+	local pos = Main.Position
+	Main.Size = UDim2.new(0, UI_WIDTH, 0, UI_HEIGHT)
+	Main.Position = pos
+end
+
+ApplyBtn.MouseButton1Click:Connect(function()
+	local f = tonumber(InputBox.Text)
+	local w = tonumber(WidthBox.Text)
+	local h = tonumber(HeightBox.Text)
+	if f then FreezeDuration = f end
+	if w then UI_WIDTH = math.clamp(w,100,700) end
+	if h then UI_HEIGHT = math.clamp(h,50,350) end
+	resizePreserve()
+end)
+
+ResetBtn.MouseButton1Click:Connect(function()
+	FreezeDuration = DEFAULT_FREEZE
+	UI_WIDTH = DEFAULT_WIDTH
+	UI_HEIGHT = DEFAULT_HEIGHT
+	InputBox.Text = tostring(DEFAULT_FREEZE)
+	WidthBox.Text = tostring(DEFAULT_WIDTH)
+	HeightBox.Text = tostring(DEFAULT_HEIGHT)
+	resizePreserve()
+end)
+
+---------------- FREEZE LOGIC ----------------
+
+local IsFreezing = false
+local function TriggerFreeze()
+	if IsFreezing then return end
+	IsFreezing = true
+	Main.Text = "FREEZING..."
+	task.wait(0.01)
+	local start = os.clock()
+	while os.clock() - start < FreezeDuration do
+		for i = 1, 5000000 do local _ = i*i end
+	end
+	Main.Text = "FREEZE"
+	IsFreezing = false
+end
+
+---------------- DRAG ----------------
+
+local dragging, dragStart, startPos, dragInput
+
+local function update(input)
+	local delta = input.Position - dragStart
+	Main.Position = UDim2.new(
+		startPos.X.Scale,
+		startPos.X.Offset + delta.X,
+		startPos.Y.Scale,
+		startPos.Y.Offset + delta.Y
+	)
+end
+
+Main.InputBegan:Connect(function(input)
+	if not DRAG_ENABLED then return end
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		dragging = true
+		dragStart = input.Position
+		startPos = Main.Position
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then dragging = false end
+		end)
+	end
+end)
+
+Main.InputChanged:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+		dragInput = input
+	end
+end)
+
+UIS.InputChanged:Connect(function(input)
+	if dragging and DRAG_ENABLED and input == dragInput then update(input) end
+end)
+
+Main.MouseButton1Click:Connect(TriggerFreeze)
+
+---------------- SOFT LIGHT GLOW ----------------
+
+TweenService:Create(
+	Stroke,
+	TweenInfo.new(1.4, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true),
+	{Thickness = 3}
+):Play()
+
+-- animation
+
+local CyberBorder = Instance.new("UIStroke")
+CyberBorder.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+CyberBorder.Color = Color3.fromRGB(255, 0, 0)
+CyberBorder.Thickness = 3
+CyberBorder.Transparency = 0.1
+CyberBorder.Parent = Main
+
+-- RED BORDER FLOW (SAFE VERSION)
+-- put AFTER Main is created and added to ScreenGui
+
+local BorderFlowContainer = Instance.new("Frame")
+BorderFlowContainer.Size = UDim2.new(1, 0, 1, 0)
+BorderFlowContainer.BackgroundTransparency = 1
+BorderFlowContainer.ClipsDescendants = true
+BorderFlowContainer.ZIndex = 3
+BorderFlowContainer.Parent = Main
+
+local PURE_RED = Color3.fromRGB(255, 0, 0)
+local LIGHT_RED = Color3.fromRGB(255, 100, 100)
+
+local function createLine(position, size, anchor)
+	local line = Instance.new("Frame")
+	line.Size = size
+	line.Position = position
+	if anchor then line.AnchorPoint = anchor end
+	line.BackgroundColor3 = PURE_RED
+	line.BorderSizePixel = 0
+	line.ZIndex = 4
+	line.Parent = BorderFlowContainer
+
+	local glow = Instance.new("UIStroke")
+	glow.Color = LIGHT_RED
+	glow.Thickness = 3
+	glow.Transparency = 0.3
+	glow.Parent = line
+	return line
+end
+
+local LineTop = createLine(UDim2.new(0,0,0,2), UDim2.new(0,0,0,2))
+local LineRight = createLine(UDim2.new(1,0,0,0), UDim2.new(0,2,0,0), Vector2.new(1,0))
+local LineBottom = createLine(UDim2.new(1,0,1,0), UDim2.new(0,0,0,2), Vector2.new(1,1))
+local LineLeft = createLine(UDim2.new(0,0,1,0), UDim2.new(0,2,0,0), Vector2.new(0,1))
+
+-- ANIMATION (non-blocking)
+task.spawn(function()
+	local SIDE_TIME = 1.2
+	local PAUSE = 2
+	local tweenInfo = TweenInfo.new(SIDE_TIME, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+
+	while Main.Parent do
+		TweenService:Create(LineTop, tweenInfo, {Size = UDim2.new(1,0,0,2)}):Play()
+		task.wait(SIDE_TIME)
+		TweenService:Create(LineRight, tweenInfo, {Size = UDim2.new(0,2,1,0)}):Play()
+		task.wait(SIDE_TIME)
+		TweenService:Create(LineBottom, tweenInfo, {Size = UDim2.new(1,0,0,2)}):Play()
+		task.wait(SIDE_TIME)
+		TweenService:Create(LineLeft, tweenInfo, {Size = UDim2.new(0,2,1,0)}):Play()
+		task.wait(SIDE_TIME)
+		task.wait(PAUSE)
+
+		-- reset after pause
+		LineTop.Size = UDim2.new(0,0,0,2)
+		LineRight.Size = UDim2.new(0,2,0,0)
+		LineBottom.Size = UDim2.new(0,0,0,2)
+		LineLeft.Size = UDim2.new(0,2,0,0)
+	end
+end)
