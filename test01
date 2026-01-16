@@ -156,7 +156,7 @@ local HeightBox = box(tostring(UI_HEIGHT),0.66)
 local InstallBtn = Instance.new("TextButton", SideMenu)
 InstallBtn.Size = UDim2.new(0.9,0,0,26)
 InstallBtn.Position = UDim2.new(0.05,0,0.78,0)
-InstallBtn.BackgroundColor3 = Color3.fromRGB(200,235,255)
+InstallBtn.BackgroundColor3 = Color3.fromRGB(150,150,150)
 InstallBtn.BackgroundTransparency = 0.05
 InstallBtn.Text = "INSTALL BLOXSTRAP 🌱"
 InstallBtn.Font = Enum.Font.GothamBold
@@ -175,7 +175,7 @@ ApplyBtn.Position = UDim2.new(0.05,0,0.9,0)
 ApplyBtn.Text = "APPLY"
 ApplyBtn.Font = Enum.Font.GothamBold
 ApplyBtn.TextSize = 11
-ApplyBtn.BackgroundColor3 = Color3.fromRGB(215,240,255)
+ApplyBtn.BackgroundColor3 = Color3.fromRGB(150,150,150)
 ApplyBtn.BackgroundTransparency = 0.05
 ApplyBtn.TextColor3 = Color3.fromRGB(40,120,180)
 
@@ -185,7 +185,7 @@ ResetBtn.Position = UDim2.new(0.53,0,0.9,0)
 ResetBtn.Text = "RESET"
 ResetBtn.Font = Enum.Font.GothamBold
 ResetBtn.TextSize = 11
-ResetBtn.BackgroundColor3 = Color3.fromRGB(215,240,255)
+ResetBtn.BackgroundColor3 = Color3.fromRGB(150,150,150)
 ResetBtn.BackgroundTransparency = 0.05
 ResetBtn.TextColor3 = Color3.fromRGB(40,120,180)
 
