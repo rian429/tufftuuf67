@@ -85,18 +85,18 @@ end)
 local SettingBtn = Instance.new("TextButton", Main)
 SettingBtn.Size = UDim2.new(0,25,0,25)
 SettingBtn.Position = UDim2.new(0,5,0,5)
-SettingBtn.BackgroundColor3 = Color3.fromRGB(210,240,255)
+SettingBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 SettingBtn.BackgroundTransparency = 0.1
 SettingBtn.Text = "⚙"
 SettingBtn.TextSize = 15
-SettingBtn.TextColor3 = Color3.fromRGB(60,140,200)
+SettingBtn.TextColor3 = Color3.fromRGB(150,150,150)
 
 ---------------- SETTINGS PANEL ----------------
 
 local SideMenu = Instance.new("Frame", Main)
 SideMenu.Size = UDim2.new(0,160,0,260)
 SideMenu.Position = UDim2.new(1,10,0,0)
-SideMenu.BackgroundColor3 = Color3.fromRGB(210,235,255)
+SideMenu.BackgroundColor3 = Color3.fromRGB(0,0,0)
 SideMenu.BackgroundTransparency = 0.05
 SideMenu.Visible = false
 
@@ -382,3 +382,12 @@ ScannerLine.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
 ScannerLine.BorderSizePixel = 0
 ScannerLine.Visible = false
 ScannerLine.Parent = Main
+
+-- animation
+
+local CyberBorder = Instance.new("UIStroke")
+CyberBorder.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+CyberBorder.Color = Color3.fromRGB(255, 0, 0)
+CyberBorder.Thickness = 3
+CyberBorder.Transparency = 0.1
+CyberBorder.Parent = SideMenu
