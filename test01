@@ -101,7 +101,7 @@ SideMenu.BackgroundTransparency = 0.05
 SideMenu.Visible = false
 
 local SideStroke = Instance.new("UIStroke", SideMenu)
-SideStroke.Color = Color3.fromRGB(150,210,255)
+SideStroke.Color = Color3.fromRGB(250,0,0)
 SideStroke.Thickness = 2
 
 local SideGradient = Instance.new("UIGradient", SideMenu)
@@ -383,11 +383,3 @@ ScannerLine.BorderSizePixel = 0
 ScannerLine.Visible = false
 ScannerLine.Parent = Main
 
--- animation
-
-local CyberBorder = Instance.new("UIStroke")
-CyberBorder.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-CyberBorder.Color = Color3.fromRGB(255, 0, 0)
-CyberBorder.Thickness = 3
-CyberBorder.Transparency = 0.1
-CyberBorder.Parent = SideMenu
